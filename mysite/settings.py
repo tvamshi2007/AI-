@@ -95,11 +95,14 @@ CSRF_TRUSTED_ORIGINS = config(
 
 # ── HTTPS / Security headers (active in production only) ─────────────────────
 if not DEBUG:
-    SECURE_SSL_REDIRECT         = True
-    SECURE_HSTS_SECONDS         = 31536000   # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD         = True
-    SESSION_COOKIE_SECURE       = True
-    CSRF_COOKIE_SECURE          = True
-    SECURE_BROWSER_XSS_FILTER   = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
+    # Render (and most PaaS) terminate SSL at the proxy — do NOT redirect
+    # internally or you get infinite redirect loops.
+    SECURE_SSL_REDIRECT             = False
+    SECURE_PROXY_SSL_HEADER         = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_HSTS_SECONDS             = 31536000   # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS  = True
+    SECURE_HSTS_PRELOAD             = True
+    SESSION_COOKIE_SECURE           = True
+    CSRF_COOKIE_SECURE              = True
+    SECURE_BROWSER_XSS_FILTER       = True
+    SECURE_CONTENT_TYPE_NOSNIFF     = True

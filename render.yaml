@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: aria-voice-assistant
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mysite.wsgi --workers 2 --threads 4 --timeout 60 --log-file -"
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true          # Render auto-generates a secure key
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.10.4"
+      - key: ALLOWED_HOSTS
+        value: "aria-voice-assistant.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://aria-voice-assistant.onrender.com"
+      - key: DATABASE_URL
+        value: "sqlite:///db.sqlite3"
